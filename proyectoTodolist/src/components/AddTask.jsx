@@ -4,6 +4,11 @@ import { Box } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import { FaTrash } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { Typography } from "@mui/material";
 
 export default function AddTask() {
   const [tasks, setTasks] = useState(
@@ -23,13 +28,14 @@ export default function AddTask() {
   function markTaskComplete(id) {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
-        return { ...task, completed: true };
+        return { ...task, completed: !task.completed }; // Cambiar el estado de completed al contrario de su valor actual
       }
       return task;
     });
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   }
+
   function deleteTask(id) {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
@@ -65,19 +71,43 @@ export default function AddTask() {
         </NativeSelect>
       </FormControl>
 
-      <button onClick={AddNewTask}>Añadir tarea</button>
+      <Button variant="contained" endIcon={<SendIcon />} onClick={AddNewTask}>
+        Send
+      </Button>
 
       {tasks.map((task) => (
-        <Box key={task.id}>
-          <h1
-            style={{ textDecoration: task.completed ? "line-through" : "none" }}
+        <Box
+          key={task.id}
+          width={400}
+          margin={5}
+          sx={{
+            textDecoration: task.completed ? "line-through" : "none",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          {task.nombre}
+
+          <Button
+            onClick={() => markTaskComplete(task.id)}
+            sx={{
+              backgroundColor: task.completed ? "grey" : "green",
+              color: "white",
+            }}
           >
-            {task.nombre}
-          </h1>
-          <button onClick={() => markTaskComplete(task.id)}>
-            {task.completed ? "Completada" : "Marcar como completada"}
-          </button>
-          <button onClick={() => deleteTask(task.id)}>Eliminar tarea</button>
+            {task.completed ? <FaCheck /> : <FaCheck />}
+          </Button>
+
+          <Button
+            onClick={() => deleteTask(task.id)}
+            sx={{
+              backgroundColor: "black",
+              color: "white",
+              marginLeft: "10px",
+            }}
+          >
+            <FaTrash />
+          </Button>
         </Box>
       ))}
     </div>
