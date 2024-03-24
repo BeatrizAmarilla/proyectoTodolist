@@ -1,17 +1,15 @@
-import './App.css'
+import "./App.css";
 import AddTask from "./components/AddTask";
-import {Typography} from "@mui/material";
+import Header from "./components/Header";
 
 function App() {
   return (
     <>
-       <Typography variant="h2" mb={4}>
-          TODO LIST
-        </Typography>
-
-    <AddTask /> 
+      <Header />
+      <AddTask />
+     
     </>
-  )
+  );
 }
 
-export default App
+export default App;

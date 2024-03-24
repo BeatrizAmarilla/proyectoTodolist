@@ -1,5 +1,9 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
+import { Box } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import NativeSelect from "@mui/material/NativeSelect";
 
 export default function AddTask() {
   const [tasks, setTasks] = useState(
@@ -35,7 +39,7 @@ export default function AddTask() {
   return (
     <div>
       <TextField
-        sx={{ backgroundColor: "white", mr: "50px" }}
+        sx={{ minWidth: 500, backgroundColor: "white", mr: "60px", mb: "10px" }}
         required
         id="filled-required"
         label="TAREA"
@@ -44,15 +48,27 @@ export default function AddTask() {
         onChange={(e) => setNombre(e.target.value)}
       />
 
-      <select name="" id="">
-        <option value="">todas</option>
-        <option value="">completas</option>
-        <option value="">incompletas</option>
-      </select>
-      <button onClick={AddNewTask}>SEND</button>
+      <FormControl sx={{ minWidth: 500, backgroundColor: "white", mr: "60px" }}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          SELECCIONAR
+        </InputLabel>
+        <NativeSelect
+          defaultValue={10}
+          inputProps={{
+            name: "TASK",
+            id: "uncontrolled-native",
+          }}
+        >
+          <option value={10}>TODAS</option>
+          <option value={20}>COMPLETA</option>
+          <option value={30}>INCOMPLETA</option>
+        </NativeSelect>
+      </FormControl>
+
+      <button onClick={AddNewTask}>Añadir tarea</button>
 
       {tasks.map((task) => (
-        <div key={task.id}>
+        <Box key={task.id}>
           <h1
             style={{ textDecoration: task.completed ? "line-through" : "none" }}
           >
@@ -62,7 +78,7 @@ export default function AddTask() {
             {task.completed ? "Completada" : "Marcar como completada"}
           </button>
           <button onClick={() => deleteTask(task.id)}>Eliminar tarea</button>
-        </div>
+        </Box>
       ))}
     </div>
   );
