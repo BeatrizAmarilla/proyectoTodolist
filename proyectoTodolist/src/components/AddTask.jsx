@@ -1,20 +1,19 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import SendIcon from "@mui/icons-material/Send";
+import { FaCheck, FaTrash } from "react-icons/fa";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
-import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import { FaTrash } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa";
-import { Typography } from "@mui/material";
 
 export default function AddTask() {
   const [tasks, setTasks] = useState(
     JSON.parse(localStorage.getItem("tasks")) || []
   );
   const [nombre, setNombre] = useState("");
+  const [filterOption, setFilterOption] = useState("all");
 
   function AddNewTask() {
     const newTask = [
@@ -28,7 +27,7 @@ export default function AddTask() {
   function markTaskComplete(id) {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
-        return { ...task, completed: !task.completed }; // Cambiar el estado de completed al contrario de su valor actual
+        return { ...task, completed: !task.completed };
       }
       return task;
     });
@@ -40,6 +39,17 @@ export default function AddTask() {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  }
+
+  function filterTasks(task) {
+    if (filterOption === "all") {
+      return true;
+    } else if (filterOption === "completed") {
+      return task.completed;
+    } else if (filterOption === "incomplete") {
+      return !task.completed;
+    }
+    return true;
   }
 
   return (
@@ -64,10 +74,11 @@ export default function AddTask() {
             name: "TASK",
             id: "uncontrolled-native",
           }}
+          onChange={(e) => setFilterOption(e.target.value)}
         >
-          <option value={10}>TODAS</option>
-          <option value={20}>COMPLETA</option>
-          <option value={30}>INCOMPLETA</option>
+          <option value="all">TODAS</option>
+          <option value="completed">COMPLETA</option>
+          <option value="incomplete">INCOMPLETA</option>
         </NativeSelect>
       </FormControl>
 
@@ -75,7 +86,7 @@ export default function AddTask() {
         Send
       </Button>
 
-      {tasks.map((task) => (
+      {tasks.filter(filterTasks).map((task) => (
         <Box
           key={task.id}
           width={400}
