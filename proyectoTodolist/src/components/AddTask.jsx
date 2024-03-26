@@ -7,6 +7,7 @@ import { FaCheck, FaTrash } from "react-icons/fa";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import { Stack, Typography } from "@mui/material";
 
 export default function AddTask() {
   const [tasks, setTasks] = useState(
@@ -51,11 +52,12 @@ export default function AddTask() {
     }
     return true;
   }
-
+  
   return (
-    <div>
+    <>
+      <Stack direction={{md:"row",xs:"column"}} flexWrap={"wrap"} width={"100%"} gap={"1rem"}>
       <TextField
-        sx={{ minWidth: 500, backgroundColor: "white", mr: "60px", mb: "10px" }}
+        sx={{backgroundColor: "white", mb: "10px",width:{md:"49%",xs:"100%"}}}
         required
         id="filled-required"
         label="TAREA"
@@ -64,7 +66,7 @@ export default function AddTask() {
         onChange={(e) => setNombre(e.target.value)}
       />
 
-      <FormControl sx={{ minWidth: 500, backgroundColor: "white", mr: "60px" }}>
+      <FormControl sx={{backgroundColor: "white",width:{md:"49%",xs:"100%"}}}>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
           SELECCIONAR
         </InputLabel>
@@ -81,46 +83,75 @@ export default function AddTask() {
           <option value="incomplete">INCOMPLETA</option>
         </NativeSelect>
       </FormControl>
-
-      <Button variant="contained" endIcon={<SendIcon />} onClick={AddNewTask}>
+      <Stack sx={{alignItems:"center",width:"100%"}}>
+      <Button variant="contained" endIcon={<SendIcon />} onClick={AddNewTask} sx={{alignSelf:"center",background:"#3f51b5"}} fullWidth>
         Send
       </Button>
+      </Stack>
 
       {tasks.filter(filterTasks).map((task) => (
-        <Box
+        <Stack
           key={task.id}
-          width={400}
-          margin={5}
+          width={{md:"80%",xs:"100%"}}
+          margin={"0 auto"}
+          direction={"row"}
           sx={{
-            textDecoration: task.completed ? "line-through" : "none",
+            justifyContent:"space-between",
+            alignItems:"center",
+           
             backgroundColor: "white",
             color: "black",
+            gap:"4px",
+            boxSizing:"border-box",
           }}
         >
-          {task.nombre}
-
+        <Stack width={"69%"} flexWrap={"nowrap"}> <Typography sx={{textDecoration: task.completed ? "line-through" : "none",}}
+        textAlign={""}>{task.nombre}</Typography></Stack>
+          
+        <Stack direction={"row"} width={"29%"} justifyContent={"center"} alignItems={"end"} gap={"4px"}>
           <Button
             onClick={() => markTaskComplete(task.id)}
+            size="small"
             sx={{
               backgroundColor: task.completed ? "grey" : "green",
               color: "white",
+              width:"49%",
+              padding:"8px",
+              minWidth:"",
+              fontSize:"12px",
             }}
           >
-            {task.completed ? <FaCheck /> : <FaCheck />}
+             <FaCheck /> 
           </Button>
 
           <Button
             onClick={() => deleteTask(task.id)}
+            size="small"
             sx={{
               backgroundColor: "black",
               color: "white",
-              marginLeft: "10px",
+              width:"49%",
+              padding:"8px",
+              minWidth:"",
+              fontSize:"12px",
             }}
           >
             <FaTrash />
           </Button>
-        </Box>
-      ))}
-    </div>
+          </Stack>
+        </Stack>
+      ))} 
+
+
+
+
+
+
+      </Stack>
+
+
+
+      
+    </>
   );
 }
